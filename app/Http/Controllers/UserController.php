@@ -47,7 +47,11 @@ public function index()
     // On récupère l'utilisateur connecté.
     $user = Auth::user();
 
-    $articles = Article::where('user_id', $user->id)->get();
+    $articles = Article::where('user_id', $user->id)
+     ->where('draft', 0) // On récupère uniquement les articles publiés
+    ->latest() // On récupère les articles les plus récents
+    ->take(5) // On prend les 5 derniers articles
+    ->get(); // On récupère les articles de l'utilisateur
 
     // On retourne la vue.
     return view('dashboard', [
@@ -105,6 +109,7 @@ public function update(Request $request, Article $article)
      // On redirige l'utilisateur vers la liste des articles (avec un flash)
      return redirect()->route('dashboard')->with('success', 'Article supprimé !');
  }
+
 
 
 }
