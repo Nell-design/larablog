@@ -15,6 +15,22 @@
                         placeholder="Titre de l'article"
                         class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                 </div>
+                <div class="p-6 pt-0 text-gray-900">
+                    <label class="block text-gray-700 mb-2">Catégories</label>
+                    <div class="flex flex-wrap gap-4">
+                        @foreach ($categories as $category)
+                            <label class="flex items-center space-x-2">
+                                <input type="checkbox" name="categories[]" value="{{ $category->id }}"
+                                    class="rounded border-gray-300"
+                                    {{ is_array(old('categories')) && in_array($category->id, old('categories')) ? 'checked' : '' }}>
+                                <span>{{ $category->name }}</span>
+                            </label>
+                        @endforeach
+                    </div>
+                    @error('categories')
+                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                    @enderror
+                </div>
 
                 <div class="p-6 pt-0 text-gray-900">
                     <!-- Contenu de l'article -->

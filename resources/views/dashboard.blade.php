@@ -21,11 +21,6 @@
             {{ session('success') }}
         </div>
     @endif
-    @if (session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
 
     @if (session('error'))
         <div class="bg-red-500 text-white p-4 rounded-lg mt-6 mb-6 text-center">
@@ -33,42 +28,104 @@
         </div>
     @endif
 
-
     <div class="text-center mb-6">
         <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-200">
-            Article list
+            Mes articles
         </h2>
-        <p class="text-gray-600 mb-4 dark:text-gray-400">You can view and manage your published articles here.</p>
+        <p class="text-gray-600 mb-4 dark:text-gray-400">Vous pouvez consulter et gérer vos articles publiés et
+            brouillons ici.</p>
     </div>
 
-    <!-- Articles -->
-    @foreach ($articles as $article)
-        <div class="bg-gray-800 flex justify-between p-6 text-white max-w-7xl  mx-auto overflow-hidden shadow-sm sm:rounded-lg mt-4">
-            <div>
-                <h2 class="text-2xl font-bold">{{ $article->title }}</h2>
-                <p class="text-gray-500">{{ substr($article->content, 0, 30) }}...</p>
-            </div>
-
-            <div class="flex flex-end justify-end  space-x-4">
-                <div class="">
-                    <a href="{{ route('articles.edit', $article->id) }}" class="text-blue-500 hover:text-blue-700"> <svg
-                            xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24">
+    {{-- Articles publiés --}}
+    {{-- <h2 class="text-xl font-bold mb-4">Articles publiés</h2> --}}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto mt-4">
+        @forelse ($articles as $article)
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 flex flex-col justify-between">
+                <div>
+                     {{-- categories --}}
+                            <div class="mb-2">
+                                @foreach ($article->categories as $category)
+                                    <span class="inline-block bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-200 shadow-sm text-xs px-3 py-1 rounded-full mr-1 mb-1">
+                                        {{ $category->name }}
+                                    </span>
+                                @endforeach
+                            </div>
+                    <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200 mb-2">{{ $article->title }}</h2>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">{{ Str::limit($article->content, 80) }}</p>
+                    <a href="{{ route('public.show', ['user' => $article->user_id, 'article' => $article->id]) }}"
+                        class="text-gray-600 hover:underline font-semibold">
+                        Lire plus
+                    </a>
+                </div>
+                <div class="flex justify-between items-center mt-4 space-x-4">
+                    <a href="{{ route('articles.edit', $article->id) }}"
+                        class="flex items-center text-blue-500 hover:bg-blue-100 hover:text-blue-700 px-2 py-1 rounded transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                             <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                                 stroke-width="2"
                                 d="M10 4H7.2c-1.12 0-1.68 0-2.108.218a2 2 0 0 0-.874.874C4 5.52 4 6.08 4 7.2v9.6c0 1.12 0 1.68.218 2.108a2 2 0 0 0 .874.874c.427.218.987.218 2.105.218h9.606c1.118 0 1.677 0 2.104-.218c.377-.192.683-.498.875-.874c.218-.428.218-.987.218-2.105V14m-4-9l-6 6v3h3l6-6m-3-3l3-3l3 3l-3 3m-3-3l3 3" />
-                        </svg> </a>
-                </div>
-                <div class="">
-                    <a href="{{ route('articles.remove', $article->id) }}" class="text-red-500 hover:text-red-700"> <svg
-                            xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24">
+                        </svg>
+                        <span class="ml-1">Modifier</span>
+                    </a>
+                    <a href="{{ route('articles.remove', $article->id) }}"
+                        class="flex items-center text-red-500 hover:bg-red-100 hover:text-red-700 px-2 py-1 rounded transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                             <path fill="currentColor" fill-rule="evenodd"
                                 d="M9.774 5L3.758 3.94l.174-.986a.5.5 0 0 1 .58-.405L18.411 5h.088h-.087l1.855.327a.5.5 0 0 1 .406.58l-.174.984l-2.09-.368l-.8 13.594A2 2 0 0 1 15.615 22H8.386a2 2 0 0 1-1.997-1.883L5.59 6.5h12.69zH5.5zM9 9l.5 9H11l-.4-9zm4.5 0l-.5 9h1.5l.5-9zm-2.646-7.871l3.94.694a.5.5 0 0 1 .405.58l-.174.984l-4.924-.868l.174-.985a.5.5 0 0 1 .58-.405z" />
-                        </svg></a>
+                        </svg>
+                        <span class="ml-1">Supprimer</span>
+                    </a>
                 </div>
             </div>
+        @empty
+            <div>Aucun article publié.</div>
+        @endforelse
+    </div>
 
-
-        </div>
-    @endforeach
-
+    {{-- Brouillons --}}
+    <h2 class="text-xl text-center text-white font-bold mt-10 mb-4">Brouillons</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto mt-4">
+        @forelse ($drafts as $article)
+            <div
+                class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 flex flex-col justify-between border-l-4 border-yellow-400">
+                <div>
+                    <span class="inline-block bg-yellow-400 text-white text-xs px-2 py-1 rounded mb-2">Brouillon</span>
+                     {{-- categories --}}
+                            <div class="mb-2">
+                                @foreach ($article->categories as $category)
+                                    <span class="inline-block bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-200 shadow-sm text-xs px-3 py-1 rounded-full mr-1 mb-1">
+                                        {{ $category->name }}
+                                    </span>
+                                @endforeach
+                            </div>
+                    <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200 mb-2">{{ $article->title }}</h2>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">{{ Str::limit($article->content, 80) }}</p>
+                    {{-- <a href="{{ route('articles.edit', $article->id) }}"
+                        class="text-blue-600 hover:underline font-semibold">
+                        Modifier le brouillon
+                    </a> --}}
+                </div>
+                <div class="flex justify-between items-center mt-4 space-x-4">
+                    <a href="{{ route('articles.edit', $article->id) }}"
+                        class="flex items-center text-blue-500 hover:bg-blue-100 hover:text-blue-700 px-2 py-1 rounded transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M10 4H7.2c-1.12 0-1.68 0-2.108.218a2 2 0 0 0-.874.874C4 5.52 4 6.08 4 7.2v9.6c0 1.12 0 1.68.218 2.108a2 2 0 0 0 .874.874c.427.218.987.218 2.105.218h9.606c1.118 0 1.677 0 2.104-.218c.377-.192.683-.498.875-.874c.218-.428.218-.987.218-2.105V14m-4-9l-6 6v3h3l6-6m-3-3l3-3l3 3l-3 3m-3-3l3 3" />
+                        </svg>
+                        <span class="ml-1">Modifier</span>
+                    </a>
+                    <a href="{{ route('articles.remove', $article->id) }}"
+                        class="flex items-center text-red-500 hover:bg-red-100 hover:text-red-700 px-2 py-1 rounded transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                            <path fill="currentColor" fill-rule="evenodd"
+                                d="M9.774 5L3.758 3.94l.174-.986a.5.5 0 0 1 .58-.405L18.411 5h.088h-.087l1.855.327a.5.5 0 0 1 .406.58l-.174.984l-2.09-.368l-.8 13.594A2 2 0 0 1 15.615 22H8.386a2 2 0 0 1-1.997-1.883L5.59 6.5h12.69zH5.5zM9 9l.5 9H11l-.4-9zm4.5 0l-.5 9h1.5l.5-9zm-2.646-7.871l3.94.694a.5.5 0 0 1 .405.58l-.174.984l-4.924-.868l.174-.985a.5.5 0 0 1 .58-.405z" />
+                        </svg>
+                        <span class="ml-1">Supprimer</span>
+                    </a>
+                </div>
+            </div>
+        @empty <div>Aucun brouillon.</div>
+        @endforelse
+    </div>
 </x-app-layout>

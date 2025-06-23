@@ -37,5 +37,5 @@ class PublicController extends Controller
             'article' => $article
         ]);
     }
-
+   
 }
