@@ -1,8 +1,9 @@
-@extends('layouts.app')
+ <x-guest-layout>
+    @extends('layouts.app')
 
 @section('title', 'Accueil - Mon Blog')
 
-@section('content')
+
 <div class="container py-5">
     <div class="text-center mb-5">
         <h1 class="display-4">Bienvenue sur Mon site de Blog</h1>
@@ -24,7 +25,9 @@
                 <div class="card mb-3">
                     <div class="card-body">
                         <h3 class="card-title">
-                            <a href="{{ route('articles.store', $article) }}">{{ $article->title }}</a>
+                           <a href="{{ route('public.show', ['user' => $article->user_id, 'article' => $article->id]) }}">
+    {{ $article->title }}
+</a>
                         </h3>
                         <p class="card-text">{{ Str::limit($article->content, 150) }}</p>
                         <div class="mb-2">
@@ -37,9 +40,9 @@
                                     <i class="bi bi-heart"></i> {{ $article->likes_count ?? 0 }}
                                 </button>
                             </form>
-                            <a href="{{ route('articles.store', $article) }}#comments" class="btn btn-sm btn-outline-secondary">
-                                <i class="bi bi-chat"></i> {{ $article->comments_count ?? 0 }} Commentaires
-                            </a>
+                            <a href="{{ route('public.show', ['user' => $article->user_id, 'article' => $article->id]) }}#comments" class="btn btn-sm btn-outline-secondary">
+    <i class="bi bi-chat"></i> {{ $article->comments_count ?? 0 }} Commentaires
+</a>
                         </div>
                         <small class="text-muted">
                             Publié le {{ $article->created_at->format('d/m/Y') }} par {{ $article->user->name ?? 'Auteur inconnu' }}
@@ -69,14 +72,14 @@
             </ul>
             <h3>Catégories populaires</h3>
             <ul>
-                <li><a href="{{ route('categories.show', ['category' => 'technologie']) }}">Technologie</a></li>
-                <li><a href="{{ route('categories.show', ['category' => 'sport']) }}">Sport</a></li>
-                <li><a href="{{ route('categories.show', ['category' => 'jeux-video']) }}">Jeux vidéo</a></li>
-                <li><a href="{{ route('categories.show', ['category' => 'cinema']) }}">Cinéma</a></li>
-                <li><a href="{{ route('categories.show', ['category' => 'musique']) }}">Musique</a></li>
-                <li><a href="{{ route('categories.show', ['category' => 'ia']) }}">IA</a></li>
-                <li><a href="{{ route('categories.show', ['category' => 'developpement']) }}">Développement</a></li>
-                <li><a href="{{ route('categories.show', ['category' => 'informatique']) }}">Informatique</a></li>
+                <li><a href="{{ route('public.show', ['category' => 'technologie']) }}">Technologie</a></li>
+                <li><a href="{{ route('public.show', ['category' => 'sport']) }}">Sport</a></li>
+                <li><a href="{{ route('public.show', ['category' => 'jeux-video']) }}">Jeux vidéo</a></li>
+                <li><a href="{{ route('public.show', ['category' => 'cinema']) }}">Cinéma</a></li>
+                <li><a href="{{ route('public.show', ['category' => 'musique']) }}">Musique</a></li>
+                <li><a href="{{ route('public.show', ['category' => 'ia']) }}">IA</a></li>
+                <li><a href="{{ route('public.show', ['category' => 'developpement']) }}">Développement</a></li>
+                <li><a href="{{ route('public.show', ['category' => 'informatique']) }}">Informatique</a></li>
             </ul>
             <h3>Suivez-nous</h3>
             <a href="#" class="btn btn-outline-dark btn-sm">Twitter</a>
@@ -156,4 +159,5 @@
         </div>
     </section>
 </div>
-@endsection
+
+</x-guest-layout>

@@ -14,6 +14,7 @@ Route::get('/home', [HomeController::class, 'home'])->name('home');
 Route::get('/dashboard', [UserController::class, 'index'])->name('dashboard');
 Route::get('/about', [HomeController::class, 'about'])->name('about');
 Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
+// Route::get('/{user}/{article}', [PublicController::class, 'show'])->name('public.show');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
